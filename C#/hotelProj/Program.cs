@@ -1,30 +1,62 @@
 ﻿
 class Program
 {
-    static void Main()
-    {
-        const int MAX_USERS = 10; // Avoid Hardcode
-        User[] users = new User[MAX_USERS];
-
-        const int MAX_ADMINS = 5;  // Avoid Hardcode
-        Admin[] admins = new Admin[MAX_ADMINS];
-
-        admins[0] = new Admin(0, "John", "Doe", "john.doe@example.com", "password123", "123-456-7890");
-        int count = 0; 
-        
-        void DisplayMenu()
+    public static void DisplayMenu()
         {
-            Console.WriteLine("=========== Welcome to Hotel Silverstone! ===========");
+            Console.WriteLine("=========== Welcome to Hotel Silverstone! ===========\n");
             Console.WriteLine("if you are a new user, please register first!");
             Console.WriteLine("1.Registration");
             Console.WriteLine("2.Login");
             Console.WriteLine("3.Exit");
             Console.WriteLine("Please select an option:");
         }
+    static void Main()
+    {
+        const int MAX_USERS = 2; // Avoid Hardcode
+        User[] users = new User[MAX_USERS];
+
+        const int MAX_ADMINS = 2;  // Avoid Hardcode
+        Admin[] admins = new Admin[MAX_ADMINS];
+
+        admins[0] = new Admin(0, "John", "Doe", "joao@gmail.com", "1234", "123-456-7890");
+        int count = 0; 
     
-        DisplayMenu();
-        
-        
+        Program.DisplayMenu();
+
+        void login()
+        {
+            Console.WriteLine("Enter your email: ");
+            string email = Console.ReadLine();
+            Console.WriteLine("Enter your password: ");
+            string password = Console.ReadLine();
+
+            if (email == admins[0].Email && password == admins[0].Password)
+            {
+                Console.WriteLine("Admin login successful!\n");
+                admins[0].DisplayAdminMenu();
+            }
+            else
+            {
+                bool userFound = false;
+                for (int i = 0; i < count; i++)
+                {
+                    if (users[i] != null && users[i].Email == email && users[i].Password == password)
+                    {
+                        Console.WriteLine("User login successful!\n");
+                        users[i].DisplayUserMenu();
+                        userFound = true;
+                        break;
+                    }
+                }
+
+                if (!userFound)
+                {
+                    Console.WriteLine("Invalid email or password. Please try again.");
+                    login();
+                }
+            }
+        }
+
         while (true)
         {
             int option = Convert.ToInt32(Console.ReadLine());
@@ -37,7 +69,7 @@ class Program
                         users[count] = new User();
                         users[count].registeraUser();
                         count++; 
-                        DisplayUserMenu();
+                        users[count - 1].DisplayUserMenu();
                     }
                     else
                     {
@@ -45,34 +77,12 @@ class Program
                     }
                     break;
                 case 2:
-                    Console.WriteLine("Enter your email: ");
-                    string email = Console.ReadLine();
-                    Console.WriteLine("Enter your password: ");
-                    string password = Console.ReadLine();
+                    login();
                     break;
                 default:
                     Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
         }
-            
-        void DisplayUserMenu()
-        {
-            Console.WriteLine("=========== User Menu ===========");
-            Console.WriteLine("1. View Available Rooms");
-            Console.WriteLine("2. Book a Room");
-            Console.WriteLine("3. View My Bookings");
-            Console.WriteLine("4. Logout");
-            Console.WriteLine("Please select an option:");
-        }
-
-        void DisplayAdminMenu()
-        {
-            Console.WriteLine("=========== Admin Menu ===========");
-            Console.WriteLine("1. Add Room");
-            Console.WriteLine("2. View All Bookings");
-            Console.WriteLine("3. Logout");
-            Console.WriteLine("Please select an option:");
-        }   
     }
 }

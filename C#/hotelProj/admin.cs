@@ -2,8 +2,8 @@ class Admin{
     int AdminId { get; set; }
     string FirstName { get; set; }
     string LastName { get; set; }
-    string Email { get; set; }
-    string Password { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
     string PhoneNumber { get; set; }
 
     // Navigation property
@@ -38,4 +38,31 @@ class Admin{
 
         adminIdCounter++;
     }
+
+    public void DisplayAdminMenu()
+        {
+            Console.WriteLine("=========== Admin Menu ===========");
+            Console.WriteLine("1. Add Room");
+            Console.WriteLine("2. View All Bookings");
+            Console.WriteLine("3. Logout");
+            Console.WriteLine("Please select an option:");
+            int option = Convert.ToInt32(Console.ReadLine());
+            switch (option)
+            {
+                case 1:
+                    Room.AddRoom();
+                    break;
+                case 2:
+                    Bookings.ViewAllBookings();
+                    break;
+                case 3:
+                    Console.WriteLine("Logging out...\n\n");
+                    Program.DisplayMenu();
+                    break;
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    DisplayAdminMenu();
+                    break;
+            }
+        }  
 }
