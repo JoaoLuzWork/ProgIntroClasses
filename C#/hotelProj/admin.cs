@@ -5,10 +5,8 @@ class Admin{
     public string Email { get; set; }
     public string Password { get; set; }
     string PhoneNumber { get; set; }
-
-    // Navigation property
-    public List<Room> Rooms { get; set; } = new List<Room>();
-    public int adminIdCounter = 1;
+    
+    public static int adminIdCounter = 1;
 
     public Admin(int adminId, string firstName, string lastName, string email, string password, string phoneNumber)
     {
@@ -22,24 +20,23 @@ class Admin{
 
     public void registeraAdm()
     {
-        AdminId = adminIdCounter;
-
         Console.WriteLine("Enter first your name: ");
-        FirstName = Console.ReadLine();
+        string firstName = Console.ReadLine();
 
         Console.WriteLine("Enter your last name: ");
-        LastName = Console.ReadLine();
+        string lastName = Console.ReadLine();
 
         Console.WriteLine("Enter your email: ");
-        Email = Console.ReadLine();
+        string email = Console.ReadLine();
 
         Console.WriteLine("Enter your phone number: ");
-        PhoneNumber = Console.ReadLine();
+        string phoneNumber = Console.ReadLine();
 
         Console.WriteLine("Enter your password: ");
-        Password = Console.ReadLine();
+        string password = Console.ReadLine();
 
-        Program.admins[adminIdCounter] = new Admin(adminIdCounter, FirstName, LastName, Email, Password, PhoneNumber); // Store the new admin in the admins array
+        // Add the new admin to the list of admins in the Program class no index needed. list was added to to the Program class to store all admins
+        Program.admins.Add(new Admin(adminIdCounter, firstName, lastName, email, password, phoneNumber));
         adminIdCounter++;
 
         DisplayAdminMenu();
@@ -47,12 +44,15 @@ class Admin{
 
     public void DisplayAdminMenu()
         {
-            Console.WriteLine("\n=========== Admin Menu ===========");
+            Console.WriteLine("\n=================================");
+            Console.WriteLine("=========== Admin Menu ===========");
+            Console.WriteLine("=================================\n");
+
             Console.WriteLine("1. Register a new admin");
-            Console.WriteLine("2. List all admins");
-            Console.WriteLine("3. Add Room");
-            Console.WriteLine("4. Edit Room");
-            Console.WriteLine("5. Edit availability of Room");
+            Console.WriteLine("2. View all admins");
+            Console.WriteLine("3. View all users");
+            Console.WriteLine("4. Add Room");
+            Console.WriteLine("5. Edit Room");
             Console.WriteLine("6. Delete Room");
             Console.WriteLine("7. View All Rooms");
             Console.WriteLine("8. View All Bookings");
@@ -68,21 +68,24 @@ class Admin{
                     ListAllAdmins();
                     break;
                 case 3:
-                    Room.EditRoom();
+                    ListAllUsers();
                     break;
                 case 4:
-                    Room.EditAvailability();
+                    Room.AddRoom();
                     break;
                 case 5:
-                    Room.DeleteRoom();
+                    Room.EditRoom();
                     break;
                 case 6:
-                    Room.ViewAllRooms();
+                    Room.DeleteRoom();
                     break;
                 case 7:
-                    Bookings.ViewAllBookings();
+                    ListAllRooms();
                     break;
                 case 8:
+                    ListAllBookings();
+                    break;
+                case 9:
                     Console.WriteLine("Logging out...\n\n");
                     Program.DisplayMenu();
                     break;
@@ -95,9 +98,9 @@ class Admin{
         public void ListAllAdmins()
         {
             Console.WriteLine("\n=========== List of Admins ===========");
-            for (int i=0; i < Program.admins.Length; i++)
+            foreach (var admin in Program.admins)
             {
-                Console.WriteLine($"Admin ID: {Program.admins[i].AdminId}, Name: {Program.admins[i].FirstName} {Program.admins[i].LastName}, Email: {Program.admins[i].Email}, Phone: {Program.admins[i].PhoneNumber}");                
+                Console.WriteLine($"Admin ID: {admin.AdminId}, Name: {admin.FirstName} {admin.LastName}, Email: {admin.Email}, Phone: {admin.PhoneNumber}");
             }
             Console.WriteLine("======================================\n");
             DisplayAdminMenu(); // Return to the main menu after listing admins
@@ -106,11 +109,34 @@ class Admin{
         public void ListAllUsers()
         {
             Console.WriteLine("\n=========== List of Users ===========");
-            for (int i=0; i <= Program.users.Length; i++)
+            foreach (var user in Program.users)
             {
-                Console.WriteLine($"User ID: {Program.users[i].UserId}, Name: {Program.users[i].FirstName} {Program.users[i].LastName}, Email: {Program.users[i].Email}, Phone: {Program.users[i].PhoneNumber}");                
+                Console.WriteLine($"User ID: {user.UserId}, Name: {user.FirstName} {user.LastName}, Email: {user.Email}, Phone: {user.PhoneNumber}");
             }
             Console.WriteLine("======================================\n");
             DisplayAdminMenu(); // Return to the main menu after listing users
         }
+
+        public void ListAllBookings()
+        {
+            Console.WriteLine("\n=========== List of Bookings ===========");
+            foreach (var booking in Program.bookings)
+            {
+                Console.WriteLine($"Booking ID: {booking.BookingId}, Room ID: {booking.RoomId}, Customer ID: {booking.CustomerId}, Check-In: {booking.CheckInDate}, Check-Out: {booking.CheckOutDate}, Total Amount: {booking.TotalAmount}");
+            }
+            Console.WriteLine("======================================\n");
+            DisplayAdminMenu(); // Return to the main menu after listing bookings
+        }
+
+        public void ListAllRooms()
+        {
+            Console.WriteLine("\n=========== List of Rooms ===========");
+            foreach (var room in Program.rooms)
+            {
+                Console.WriteLine($"Room ID: {room.RoomId}, Room Number: {room.RoomNumber}, Room Type: {room.RoomType}, Price per Night: {room.PricePerNight}, Is Available: {room.IsAvailable}");
+            }
+            Console.WriteLine("======================================\n");
+            DisplayAdminMenu(); // Return to the main menu after listing rooms
+        }
+
 }

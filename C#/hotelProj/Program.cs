@@ -2,25 +2,56 @@
 class Program
 {
     public static void DisplayMenu()
-        {
-            Console.WriteLine("\n=========== Welcome to Hotel Silverstone! ===========\n");
-            Console.WriteLine("if you are a new user, please register first!");
-            Console.WriteLine("1.Registration");
-            Console.WriteLine("2.Login");
-            Console.WriteLine("3.Exit");
-            Console.WriteLine("Please select an option:");
-        }
+    {
+        Console.WriteLine("\n=========== Welcome to Hotel Silverstone! ===========\n");
+        Console.WriteLine("if you are a new user, please register first!");
+        Console.WriteLine("1.Registration");
+        Console.WriteLine("2.Login");
+        Console.WriteLine("3.Exit");
+        Console.WriteLine("Please select an option:");
+    }
+    public static List<User> users = new List<User>();
+    public static List<Admin> admins = new List<Admin>();
+    public static List<Room> rooms = new List<Room>();
+    public static List<Bookings> bookings = new List<Bookings>();
+    public static Admin currentAdmin = null;
+    public static User currentUser = null;
 
-    const int MAX_USERS = 2; // Avoid Hardcode
-    public static User[] users = new User[MAX_USERS];
-    const int MAX_ADMINS = 2;  // Avoid Hardcode
-    public static Admin[] admins = new Admin[MAX_ADMINS];
+    public static void registeraUser()
+    {
+        Console.WriteLine("Enter your first name: ");
+        string firstName = Console.ReadLine();
+
+        Console.WriteLine("Enter your last name: ");
+        string lastName = Console.ReadLine();
+
+        Console.WriteLine("Enter your email: ");
+        string email = Console.ReadLine();
+
+        Console.WriteLine("Enter your phone number: ");
+        string phoneNumber = Console.ReadLine();
+
+        Console.WriteLine("Enter your password: ");
+        string password = Console.ReadLine(); // Default password for simplicity
+
+        users.Add(new User(User.userIdCounter, firstName, lastName, email, password, phoneNumber));
+        User.userIdCounter++;
+        User currentUser = users[users.Count - 1]; // Set the current user to the newly registered user
+        Console.WriteLine($"Welcome, {currentUser.FirstName} {currentUser.LastName}! You have registered successfully.");
+        users[users.Count - 1].DisplayUserMenu();
+
+    }
+
     static void Main()
     {
         
-        admins[0] = new Admin(0, "Joao", "Rodrigues", "joao@gmail.com", "1234", "123-456-7890"); // Predefined admin user
+        admins.Add(new Admin(0, "Joao", "Rodrigues", "joao@gmail.com", "1234", "123-456-7890")); // Predefined admin user
 
-        int count = 0; //add user progressively, to keep track of the number of registered users
+        //pre definesd rooms
+        rooms.Add(new Room(0, "101", "Single", 100.00m, true));
+        rooms.Add(new Room(1, "102", "Double", 150.00m, true));
+        rooms.Add(new Room(2, "103", "Suite", 250.00m, false));
+
         int loginAttempts = 0; // Track login attempts
 
         void login()
@@ -30,45 +61,36 @@ class Program
             Console.WriteLine("Enter your password: ");
             string password = Console.ReadLine();
 
-            if (email == admins[0].Email && password == admins[0].Password) // Check if the admin credentials match
+            Admin matchedAdmin = admins.Find(a => a.Email == email && a.Password == password);
+            User matchedUser = users.Find(u => u.Email == email && u.Password == password);
+            if (matchedAdmin != null)
             {
                 Console.WriteLine("Admin login successful!\n");
-                admins[0].DisplayAdminMenu();
-            }
-            else
-            {
-                bool userFound = false;
-                for (int i = 0; i < count; i++)
-                {
-                    if (users[i] != null && users[i].Email == email && users[i].Password == password) // Check if the user exists and the password matches
-                    {
-                        Console.WriteLine("User login successful!\n");
-                        users[i].DisplayUserMenu();//goes to the user menu
-                        userFound = true;
-                        break;
-                    }
+                matchedAdmin.DisplayAdminMenu();
                 }
-
-                if (!userFound)
+                else if (matchedUser != null)
                 {
-                    Console.WriteLine("Invalid email or password. Please try again.\n");
-                    loginAttempts++; // Increment the login attempts counter
-                    if (loginAttempts >= 3) // Check if the user has exceeded the maximum allowed attempts
-                    {
-                        Console.WriteLine("Too many failed login attempts. Please try again later.\n");
-                        loginAttempts = 0; // Reset the counter
-                        Program.DisplayMenu(); //goes back to the main menu
+                    Console.WriteLine("User login successful!\n");
+                    matchedUser.DisplayUserMenu();//goes to the user menu
                     }
                     else
                     {
-                        login(); //try to login again
+                        Console.WriteLine("Invalid email or password. Please try again.\n");
+                        loginAttempts++; // Increment the login attempts counter
+                        if (loginAttempts >= 3) // Check if the user has exceeded the maximum allowed attempts
+                        {
+                            Console.WriteLine("Too many failed login attempts. Please try again later.\n");
+                            loginAttempts = 0; // Reset the counter
+                            DisplayMenu(); //goes back to the main menu
+                        }
+                        else
+                        {
+                            login(); //try to login again
+                        }
                     }
-                }
-            }
         }
 
-        Program.DisplayMenu();
-
+        DisplayMenu();
         while (true)
         {
             int option = Convert.ToInt32(Console.ReadLine());
@@ -76,17 +98,7 @@ class Program
             switch (option)
             {
                 case 1:
-                     if(count < users.Length) // check if the user array is not full
-                    {
-                        users[count] = new User(); //create a new user object
-                        users[count].registeraUser(); //register the user
-                        count++; //increment the count of registered users, for a new user in the array (would be different if we were using a DB)
-                        users[count - 1].DisplayUserMenu();
-                    }
-                    else
-                    {
-                        Console.WriteLine(" XXX------>User limit reached!<------XXX\n"); //error message if the user array is full
-                    }
+                    registeraUser();
                     break;
                 case 2:
                     login();//call the login function
