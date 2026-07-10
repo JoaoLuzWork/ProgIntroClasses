@@ -12,3 +12,4 @@ C:\Users\User\Documents\GitHub\ProgIntroClasses\C#\hotelProj\obj\Debug\net10.0\r
 C:\Users\User\Documents\GitHub\ProgIntroClasses\C#\hotelProj\obj\Debug\net10.0\hotelProj.pdb
 C:\Users\User\Documents\GitHub\ProgIntroClasses\C#\hotelProj\obj\Debug\net10.0\hotelProj.genruntimeconfig.cache
 C:\Users\User\Documents\GitHub\ProgIntroClasses\C#\hotelProj\obj\Debug\net10.0\ref\hotelProj.dll
+C:\Users\User\Documents\GitHub\ProgIntroClasses\C#\hotelProj\obj\Debug\net10.0\hotelProj.sourcelink.json

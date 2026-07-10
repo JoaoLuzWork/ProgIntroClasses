@@ -16,7 +16,6 @@ class Room
         PricePerNight = pricePerNight;
         IsAvailable = isAvailable;
     }
-
     public static void AddRoom()
     {
 
@@ -42,7 +41,6 @@ class Room
 
         Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after adding a room
     }
-
     public static void EditRoom()
     {
         Console.WriteLine("==================================");
@@ -79,7 +77,6 @@ class Room
             EditRoom(); // Call EditRoom again to allow the admin to try again
         }
     }
-
     public static void EditAvailability()
     {
         Console.WriteLine("==========================================");
@@ -99,6 +96,7 @@ class Room
             roomToEdit.IsAvailable = newIsAvailable;
 
             Console.WriteLine("Room availability updated successfully!");
+            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after editing availability
         }
         else
         {
@@ -106,7 +104,6 @@ class Room
             EditAvailability(); // Call EditAvailability again to allow the admin to try again
         }
     }
-
     public static void DeleteRoom()
     {
         Console.WriteLine("====================================");
