@@ -1,4 +1,4 @@
-class Admin{    
+public class Admin{    
     int AdminId { get; set; }
     string FirstName { get; set; }
     string LastName { get; set; }
@@ -51,12 +51,15 @@ class Admin{
             Console.WriteLine("1. Register a new admin");
             Console.WriteLine("2. View all admins");
             Console.WriteLine("3. View all users");
-            Console.WriteLine("4. Add Room");
-            Console.WriteLine("5. Edit Room");
-            Console.WriteLine("6. Delete Room");
-            Console.WriteLine("7. View All Rooms");
-            Console.WriteLine("8. View All Bookings");
-            Console.WriteLine("9. Logout");
+            Console.WriteLine("4. View All Bookings");
+            Console.WriteLine("5. View All Rooms");
+            Console.WriteLine("6. Add Room");
+            Console.WriteLine("7. Edit Room");
+            Console.WriteLine("8. Delete Room");
+            Console.WriteLine("9. Add Bookings");
+            Console.WriteLine("10. Edit Bookings");
+            Console.WriteLine("11. Delete Bookings");
+            Console.WriteLine("12. Logout");
             Console.WriteLine("Please select an option:");
             int option = Convert.ToInt32(Console.ReadLine());
             switch (option)
@@ -83,9 +86,18 @@ class Admin{
                     ListAllRooms();
                     break;
                 case 8:
-                    ListAllBookings();
+                    Bookings.AddBooking();
                     break;
                 case 9:
+                    Bookings.EditBooking();
+                    break;
+                case 10:
+                    Bookings.DeleteBooking();
+                    break;
+                case 11:
+                    ListAllBookings();
+                    break;
+                case 12:
                     Console.WriteLine("Logging out...\n\n");
                     Program.DisplayMenu();
                     break;

@@ -44,10 +44,10 @@ class Program
 
     static void Main()
     {
-        
+        //pre defined admin user
         admins.Add(new Admin(0, "Joao", "Rodrigues", "joao@gmail.com", "1234", "123-456-7890")); // Predefined admin user
 
-        //pre definesd rooms
+        //pre defined rooms
         rooms.Add(new Room(0, "101", "Single", 100.00m, true));
         rooms.Add(new Room(1, "102", "Double", 150.00m, true));
         rooms.Add(new Room(2, "103", "Suite", 250.00m, false));
@@ -66,7 +66,7 @@ class Program
             if (matchedAdmin != null)
             {
                 Console.WriteLine("Admin login successful!\n");
-                matchedAdmin.DisplayAdminMenu();
+                matchedAdmin.DisplayAdminMenu();//goes to the admin menu
                 }
                 else if (matchedUser != null)
                 {
