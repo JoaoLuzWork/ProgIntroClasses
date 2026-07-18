@@ -34,11 +34,12 @@ class Program
         Console.WriteLine("Enter your password: ");
         string password = Console.ReadLine(); // Default password for simplicity
 
+        //get all the info and add a objecto to the list with the constuctor from user class
         users.Add(new User(User.userIdCounter, firstName, lastName, email, password, phoneNumber));
         User.userIdCounter++;
-        User currentUser = users[users.Count - 1]; // Set the current user to the newly registered user
+        currentUser = users[users.Count - 1]; // Track the newly registered user as the logged-in user
         Console.WriteLine($"Welcome, {currentUser.FirstName} {currentUser.LastName}! You have registered successfully.");
-        users[users.Count - 1].DisplayUserMenu();
+        User.DisplayUserMenu();
 
     }
 
@@ -61,17 +62,22 @@ class Program
             Console.WriteLine("Enter your password: ");
             string password = Console.ReadLine();
 
+            //these two are responsible to check if the input mathces with any data in the lists of user and admin
+            //the login will always give priority to admins
+            //blocking same user names and emails is to be implemented
             Admin matchedAdmin = admins.Find(a => a.Email == email && a.Password == password);
             User matchedUser = users.Find(u => u.Email == email && u.Password == password);
             if (matchedAdmin != null)
             {
+                currentAdmin = matchedAdmin; // Track the logged-in admin
                 Console.WriteLine("Admin login successful!\n");
                 matchedAdmin.DisplayAdminMenu();//goes to the admin menu
                 }
                 else if (matchedUser != null)
                 {
+                    currentUser = matchedUser; // Track the logged-in user to use in the other functions
                     Console.WriteLine("User login successful!\n");
-                    matchedUser.DisplayUserMenu();//goes to the user menu
+                    User.DisplayUserMenu();//goes to the user menu
                     }
                     else
                     {

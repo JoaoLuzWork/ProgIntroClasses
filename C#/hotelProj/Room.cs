@@ -8,6 +8,7 @@ public class Room
 
     public static int roomIdCounter = 3; // Start from 3 since we already have 3 rooms in the list
 
+    //constructor
     public Room(int roomId, string roomNumber, string roomType, decimal pricePerNight, bool isAvailable)
     {
         RoomId = roomId;
@@ -16,6 +17,8 @@ public class Room
         PricePerNight = pricePerNight;
         IsAvailable = isAvailable;
     }
+
+    //add new room to the program array of rooms
     public static void AddRoom()
     {
 
@@ -41,6 +44,8 @@ public class Room
 
         Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after adding a room
     }
+
+    //edit a selected room
     public static void EditRoom()
     {
         Console.WriteLine("\n==================================");
@@ -77,6 +82,8 @@ public class Room
             EditRoom(); // Call EditRoom again to allow the admin to try again
         }
     }
+
+    //Edit availability of a specific room
     public static void EditAvailability()
     {
         Console.WriteLine("\n==========================================");
@@ -104,6 +111,8 @@ public class Room
             EditAvailability(); // Call EditAvailability again to allow the admin to try again
         }
     }
+
+    //delete selected room
     public static void DeleteRoom()
     {
         Console.WriteLine("\n====================================");
@@ -126,5 +135,17 @@ public class Room
             Console.WriteLine("Room not found. Please try again.");
             DeleteRoom(); // Call DeleteRoom again to allow the admin to try again
         }
+    }
+
+    //for each room that is available it will print here
+    public static void AvailableRooms()
+    {
+        Console.WriteLine("\n=========== List of Availavle Rooms ===========");
+        foreach (Room r in Program.rooms.FindAll(r => r.IsAvailable == true))
+        {
+            Console.WriteLine($"Room {r.RoomNumber} is available.");
+        }
+        Console.WriteLine("===============================================\n");
+        User.DisplayUserMenu();
     }
 }
