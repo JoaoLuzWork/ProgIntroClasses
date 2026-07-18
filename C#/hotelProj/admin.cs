@@ -51,8 +51,8 @@ public class Admin{
             Console.WriteLine("1. Register a new admin");
             Console.WriteLine("2. View all admins");
             Console.WriteLine("3. View all users");
-            Console.WriteLine("4. View All Bookings");
-            Console.WriteLine("5. View All Rooms");
+            Console.WriteLine("4. View All Rooms");
+            Console.WriteLine("5. View All Bookings");
             Console.WriteLine("6. Add Room");
             Console.WriteLine("7. Edit Room");
             Console.WriteLine("8. Delete Room");
@@ -74,28 +74,28 @@ public class Admin{
                     ListAllUsers();
                     break;
                 case 4:
-                    Room.AddRoom();
-                    break;
-                case 5:
-                    Room.EditRoom();
-                    break;
-                case 6:
-                    Room.DeleteRoom();
-                    break;
-                case 7:
                     ListAllRooms();
                     break;
+                case 5:
+                    ListAllBookings();
+                    break;
+                case 6:
+                    Room.AddRoom();
+                    break;
+                case 7:
+                    Room.EditRoom();
+                    break;
                 case 8:
-                    Bookings.AddBooking();
+                    Room.DeleteRoom();
                     break;
                 case 9:
-                    Bookings.EditBooking();
+                    Bookings.AddBooking();
                     break;
                 case 10:
-                    Bookings.DeleteBooking();
+                    Bookings.EditBooking();
                     break;
                 case 11:
-                    ListAllBookings();
+                    Bookings.DeleteBooking();
                     break;
                 case 12:
                     Console.WriteLine("Logging out...\n\n");

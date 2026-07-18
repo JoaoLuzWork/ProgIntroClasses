@@ -25,7 +25,7 @@ public class Bookings
 
     public static void AddBooking()
     {
-        Console.WriteLine("==================================");
+        Console.WriteLine("\n==================================");
         Console.WriteLine("============ Add Booking ===========");
         Console.WriteLine("==================================");
 
@@ -122,7 +122,7 @@ public class Bookings
 
      public static void DeleteBooking()
     {
-        Console.WriteLine("====================================");
+        Console.WriteLine("\n====================================");
         Console.WriteLine("============ Delete Booking ===========");
         Console.WriteLine("====================================");
 

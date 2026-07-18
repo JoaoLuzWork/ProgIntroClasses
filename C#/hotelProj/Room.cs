@@ -1,8 +1,8 @@
-class Room
+public class Room
 {
     public int RoomId { get; set; }
-    public string RoomNumber { get; set; }
-    public string RoomType { get; set; }
+    public string RoomNumber { get; set; } = "";
+    public string RoomType { get; set; } = "";
     public decimal PricePerNight { get; set; }
     public bool IsAvailable { get; set; }
 
@@ -24,7 +24,7 @@ class Room
         Console.WriteLine("==================================");
         
         Console.WriteLine("Enter room number: ");
-        int roomNumber = Convert.ToInt32(Console.ReadLine());
+        string roomNumber = Console.ReadLine();
 
         Console.WriteLine("Enter room type: ");
         string roomType = Console.ReadLine();
@@ -43,7 +43,7 @@ class Room
     }
     public static void EditRoom()
     {
-        Console.WriteLine("==================================");
+        Console.WriteLine("\n==================================");
         Console.WriteLine("============ Edit Room ===========");
         Console.WriteLine("==================================");
 
@@ -79,7 +79,7 @@ class Room
     }
     public static void EditAvailability()
     {
-        Console.WriteLine("==========================================");
+        Console.WriteLine("\n==========================================");
         Console.WriteLine("============ Edit Availability ===========");
         Console.WriteLine("==========================================");
       
@@ -106,7 +106,7 @@ class Room
     }
     public static void DeleteRoom()
     {
-        Console.WriteLine("====================================");
+        Console.WriteLine("\n====================================");
         Console.WriteLine("============ Delete Room ===========");
         Console.WriteLine("====================================");
 
