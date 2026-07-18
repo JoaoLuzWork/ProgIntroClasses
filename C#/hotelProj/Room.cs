@@ -143,7 +143,7 @@ public class Room
         Console.WriteLine("\n=========== List of Availavle Rooms ===========");
         foreach (Room r in Program.rooms.FindAll(r => r.IsAvailable == true))
         {
-            Console.WriteLine($"Room {r.RoomNumber} is available.");
+            Console.WriteLine($"Room {r.RoomNumber} is available. This room is {r.RoomType} Room. The price is {r.PricePerNight}");
         }
         Console.WriteLine("===============================================\n");
         User.DisplayUserMenu();
