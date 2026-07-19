@@ -107,6 +107,7 @@ public class Admin{
                     break;
             }
         }
+
         public void ListAllAdmins()
         {
             Console.WriteLine("\n=========== List of Admins ===========");

@@ -67,6 +67,46 @@ public class User{
 
     static void EditProfile()
     {
-        
+        Console.WriteLine("\n==================================");
+        Console.WriteLine("============ Edit Profile ===========");
+        Console.WriteLine("==================================");
+
+        //get the current user from program and defines as the object of manipulation
+        User user = Program.currentUser;
+
+        Console.WriteLine($"Enter new first name (leave blank to keep '{user.FirstName}'): ");
+        string firstName = Console.ReadLine();
+
+        Console.WriteLine($"Enter new last name (leave blank to keep '{user.LastName}'): ");
+        string lastName = Console.ReadLine();
+
+        Console.WriteLine($"Enter new email (leave blank to keep '{user.Email}'): ");
+        string email = Console.ReadLine();
+
+        Console.WriteLine("Enter new password (leave blank to keep current password): ");
+        string password = Console.ReadLine();
+
+        Console.WriteLine($"Enter new phone number (leave blank to keep '{user.PhoneNumber}'): ");
+        string phoneNumber = Console.ReadLine();
+
+        //this conditional check if the variable receivide is not(!) null 
+        //if it is null nothing will change, if it is not null the values will be overwrited
+        if (!string.IsNullOrWhiteSpace(firstName))
+            user.FirstName = firstName;
+
+        if (!string.IsNullOrWhiteSpace(lastName))
+            user.LastName = lastName;
+
+        if (!string.IsNullOrWhiteSpace(email))
+            user.Email = email;
+
+        if (!string.IsNullOrWhiteSpace(password))
+            user.Password = password;
+
+        if (!string.IsNullOrWhiteSpace(phoneNumber))
+            user.PhoneNumber = phoneNumber;
+
+        Console.WriteLine("Profile updated successfully!");
+        DisplayUserMenu(); // Return to the user menu after editing profile
     }
 }

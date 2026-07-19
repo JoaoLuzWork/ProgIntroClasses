@@ -271,14 +271,17 @@ public class Bookings
 
         Bookings bookingToDelete = Program.bookings.Find(b => b.BookingId == bookid && b.CustomerId == Program.currentUser.UserId);
 
+        //receives booking id and check if it exists
         if (bookingToDelete != null)
         {
+            //then finds romm id to set as available as the booking is being canceled
             Room room = Program.rooms.Find(r => r.RoomId == bookingToDelete.RoomId);
             if (room != null)
             {
                 room.IsAvailable = true;
             }
 
+            //then delete it
             Program.bookings.Remove(bookingToDelete);
             Console.WriteLine("Booking cancelled successfully!");
             User.DisplayUserMenu(); // Return to the user menu after cancelling a booking
