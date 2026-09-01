@@ -1,96 +1,142 @@
-# 📚 ProgIntroClasses
+# Hotel Silverstone — Console Booking System
 
-Coursework from my introduction to programming classes. Each folder is a small, self-contained console application built while learning a language — no frameworks, no database, no external packages. The point of each one is the fundamentals: classes and objects, lists as storage, menu-driven flow, and basic CRUD.
-
----
-
-## 📖 About
-
-This repository gathers the exercises and small projects I built while getting to grips with the core building blocks of programming. Both projects are console applications, written from scratch in their respective languages, and both use the same underlying idea: model the domain with classes, keep the data in a list that stands in for a database, and drive everything through a menu.
-
-Neither project pulls in a framework or an external package — the point was to learn the languages, not the libraries.
+A console-based hotel management application written in C# (.NET 10), built as part of an
+introductory programming course. It models a small hotel with rooms, guests, administrators
+and bookings, all held in memory for the lifetime of the run.
 
 ---
 
-## 📂 Repository Structure
+## Requirements
 
-```
-ProgIntroClasses/
-├── python/   Product Management System  — Python
-└── C#/       Hotel Silverstone booking  — C# / .NET
-```
+- [.NET SDK 10.0](https://dotnet.microsoft.com/download) or later
+- Any terminal (the app is fully interactive via the console)
 
-| Folder    | Project                    | Language   |
-| --------- | -------------------------- | ---------- |
-| `python/` | Product Management System  | Python 3   |
-| `C#/`     | Hotel Silverstone Booking  | C# / .NET  |
-
----
-
-## 🐍 `python/` — Product Management System
-
-A single-file inventory manager (`managementProgram.py`). A `Product` class holds id, name, description, brand, colour, price and quantity; a `ProductsManagementSystem` class keeps them in a list that stands in for a database.
-
-From the menu you can:
-
-- ➕ **Add a product** — rejecting ids that already exist
-- 📋 **List** everything
-- 🔍 **Search** by id or by name
-- ✏️ **Edit** one field or all of them at once
-- 🗑️ **Delete** by id
-
-Numeric prompts go through a small helper that re-asks until you actually type a number.
-
-### ▶️ Running
-
-Run it with Python 3 — there is nothing to install:
-
-```bash
-python3 python/managementProgram.py
-```
-
----
-
-## 🏨 `C#/` — Hotel Silverstone
-
-A console hotel booking system (`C#/hotelProj`), and the larger of the two projects. It splits into five files — `Program`, `User`, `Admin`, `Room` and `Bookings` — with static lists in `Program` acting as the in-memory database.
-
-There are two roles:
-
-- **👤 Guests** — register, log in, browse available rooms, book one, then view, update or cancel their own bookings, and edit their profile.
-- **🛡️ Admins** — get a wider menu: list every guest, room and booking, full room management, bookings on behalf of any guest, and registering another admin.
-
-Nightly totals are worked out from the date range and the room's price.
-
-### ▶️ Running
-
-Needs the .NET SDK:
+## Running
 
 ```bash
 cd "C#/hotelProj"
 dotnet run
 ```
 
-📘 That folder has its own [`README.md`](./C%23/hotelProj/README.md) with the seed data, a file-by-file breakdown and the known limitations.
+The app boots straight into the main menu:
+
+```
+=========== Welcome to Hotel Silverstone! ===========
+
+if you are a new user, please register first!
+1.Registration
+2.Login
+3.Exit
+```
+
+### Seed data
+
+The program starts with data hard-coded in `Program.Main`:
+
+| Admin | Email | Password |
+|-------|-------|----------|
+| Joao Rodrigues | `joao@gmail.com` | `1234` |
+
+| Room Id | Number | Type | Price / night | Available |
+|---------|--------|------|---------------|-----------|
+| 0 | 101 | Single | 100.00 | yes |
+| 1 | 102 | Double | 150.00 | yes |
+| 2 | 103 | Suite  | 250.00 | no |
+
+There are no seeded guests — register one from the main menu first.
 
 ---
 
-## 📝 Notes
+## Project structure
 
-Neither project saves anything — close the program and the data is gone. That is deliberate for the exercise: the lists are there to stand in for a database while the focus stays on the language itself.
+```
+C#/hotelProj/
+├── hotelProj.csproj    Project file (net10.0, implicit usings, nullable enabled)
+├── Program.cs          Entry point, in-memory data stores, main menu, login/registration
+├── User.cs             Guest model + guest menu + profile editing
+├── Admin.cs            Admin model + admin menu + listing screens
+├── Room.cs             Room model + room CRUD + availability listing
+└── Bookings.cs         Booking model + booking CRUD for both guests and admins
+```
+
+`bin/` and `obj/` are build output and can be regenerated with `dotnet build`.
+
+## How it fits together
+
+`Program` acts as the in-memory database. Four static lists hold every entity, and two
+static fields track who is signed in:
+
+```csharp
+public static List<User> users;
+public static List<Admin> admins;
+public static List<Room> rooms;
+public static List<Bookings> bookings;
+public static Admin currentAdmin;
+public static User currentUser;
+```
+
+Every other class reaches into those lists directly (`Program.rooms.Find(...)`), and each
+screen is a `static` method that prints a header, reads input with `Console.ReadLine()`,
+mutates the lists, then calls the menu method it came from. Navigation is therefore
+call-based rather than loop-based — `Room.AvailableRooms()` ends by calling
+`User.DisplayUserMenu()`, which dispatches the next choice through a `switch`.
+
+Login checks the admin list first, then the guest list, so admins always win on a
+matching email/password pair. Three consecutive failures bounce back to the main menu.
+
+## Features
+
+### Guest menu
+
+| # | Option | Backing method |
+|---|--------|----------------|
+| 1 | View available rooms | `Room.AvailableRooms()` |
+| 2 | Book a room | `Bookings.BookRoom()` |
+| 3 | View my bookings | `Bookings.ViewMyBookings()` |
+| 4 | Cancel booking | `Bookings.CancelBooking()` |
+| 5 | Update booking dates | `Bookings.UpdateBooking()` |
+| 6 | Edit profile | `User.EditProfile()` |
+| 7 | Logout | back to main menu |
+
+Guests only ever see their own bookings — every lookup is filtered by
+`b.CustomerId == Program.currentUser.UserId`.
+
+### Admin menu
+
+Register another admin, list admins / guests / rooms / bookings, full room CRUD
+(add, edit, delete, toggle availability) and full booking CRUD on behalf of any guest.
+
+### Booking rules
+
+- Check-out must be strictly after check-in.
+- Total is `(checkOut - checkIn).Days * room.PricePerNight`.
+- Booking a room sets `IsAvailable = false`; cancelling or deleting sets it back to `true`.
 
 ---
 
-## 👤 Author
+## Known limitations
 
-**João Pedro Luz**
+These are worth knowing before extending the project — several are natural next exercises.
 
-- GitHub: [@JoaoLuzWork](https://github.com/JoaoLuzWork)
-- Email: <joao.pedro.luz.work@gmail.com>
-- Location: Dublin, Ireland
+- **No persistence.** Everything lives in `List<T>`; closing the app discards all guests
+  and bookings. Only the seeded admin and rooms come back.
+- **Passwords in plain text.** Stored as-is on the model and compared directly. Fine for a
+  class exercise, not for anything real.
+- **No input validation.** `Convert.ToInt32` / `Convert.ToDecimal` / `Convert.ToDateTime`
+  throw on anything unexpected, so typing a letter at a menu prompt crashes the app.
+- **Menus recurse instead of looping.** Every screen ends by calling its menu method again,
+  so navigating around grows the call stack rather than returning to a loop.
+- **Duplicate emails are allowed.** Registration does not check whether an email is already
+  taken (flagged in a `// to be implemented` comment in `Program.cs`).
+- **No date-overlap check.** Availability is a single boolean, so a room cannot be booked
+  for two separate future date ranges.
+- **Build output is committed.** Adding a `.gitignore` with `bin/` and `obj/` would keep the
+  repo clean.
 
----
+## Possible next steps
 
-## 📄 License
-
-This project is open source and available for personal and educational use.
+1. Wrap menus in `while` loops and drop the recursive re-entry.
+2. Add a `TryParse`-based input helper for ints, decimals and dates.
+3. Persist the four lists to JSON on exit and reload them on start.
+4. Hash passwords, and reject duplicate emails at registration.
+5. Replace the `IsAvailable` flag with a per-date overlap check against existing bookings.
