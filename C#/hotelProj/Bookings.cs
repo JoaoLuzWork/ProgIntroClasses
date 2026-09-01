@@ -38,6 +38,7 @@ public class Bookings
         {
             Console.WriteLine("Room not found. Please try again.");
             AddBooking(); // Call AddBooking again to allow the admin to try again
+            return; // stop this attempt: everything below would use a null room
         }
 
         Console.WriteLine("Enter customer Id: ");
@@ -48,6 +49,7 @@ public class Bookings
         {
             Console.WriteLine("Customer not found. Please try again.");
             AddBooking(); // Call AddBooking again to allow the admin to try again
+            return; // stop this attempt: everything below would use a null user
         }
 
         Console.WriteLine("Enter check-in date (yyyy-MM-dd): ");
@@ -60,6 +62,7 @@ public class Bookings
         {
             Console.WriteLine("Check-out date must be after check-in date. Please try again.");
             AddBooking(); // Call AddBooking again to allow the admin to try again
+            return; // stop this attempt: the retry already handled the booking
         }
 
         int nights = (checkOutDate - checkInDate).Days;
@@ -75,7 +78,7 @@ public class Bookings
         bookIdCounter++;
         room.IsAvailable = false;
         Console.WriteLine("\nBooking added successfully!");
-        Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after adding a booking
+        Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after adding a booking
     }
 
     public static void EditBooking()
@@ -88,10 +91,18 @@ public class Bookings
         int bookid = Convert.ToInt32(Console.ReadLine());
 
         Bookings bookingToEdit = Program.bookings.Find(b => b.BookingId == bookid);
-        Room room = Program.rooms.Find(r => r.RoomId == bookingToEdit.RoomId);
 
         if (bookingToEdit != null)
         {
+            //look the room up only after we know the booking exists
+            Room room = Program.rooms.Find(r => r.RoomId == bookingToEdit.RoomId);
+            if (room == null) //the room may have been deleted since the booking was made
+            {
+                Console.WriteLine("The room for this booking no longer exists.");
+                Program.currentAdmin.DisplayAdminMenu();
+                return;
+            }
+
             Console.WriteLine("Enter check-in date (yyyy-MM-dd): ");
             DateTime newCheckInDate = Convert.ToDateTime(Console.ReadLine());
 
@@ -102,6 +113,7 @@ public class Bookings
             {
                 Console.WriteLine("Check-out date must be after check-in date. Please try again.");
                 EditBooking(); // Call EditBooking to allow the admin to try again
+                return; // stop this attempt: the retry already handled the edit
             }
 
             int nights = (newCheckOutDate - newCheckInDate).Days;
@@ -112,12 +124,12 @@ public class Bookings
             bookingToEdit.TotalAmount = totalAmount;
             
             Console.WriteLine("Room details updated successfully!");
-            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after editing a room
+            Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after editing a room
         }
         else
         {
-            Console.WriteLine("Room not found. Please try again.");
-            EditBooking(); // Call EditRoom to allow the admin to try again
+            Console.WriteLine("Booking not found. Please try again.");
+            EditBooking(); // Call EditBooking to allow the admin to try again
         }
     }
 
@@ -142,7 +154,7 @@ public class Bookings
 
             Program.bookings.Remove(bookingToDelete);
             Console.WriteLine("Booking deleted successfully!");
-            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after deleting a Booking
+            Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after deleting a Booking
         }
         else
         {
@@ -165,6 +177,7 @@ public class Bookings
         {
             Console.WriteLine("Room not found or unavailable. Please try again.");
             BookRoom(); // Call BookRoom again to allow the user to try again
+            return; // stop this attempt: everything below would use a null room
         }
 
         Console.WriteLine("Enter check-in date (yyyy-MM-dd): ");
@@ -177,6 +190,7 @@ public class Bookings
         {
             Console.WriteLine("Check-out date must be after check-in date. Please try again.");
             BookRoom(); // Call BookRoom again to allow the user to try again
+            return; // stop this attempt: the retry already handled the booking
         }
 
         int nights = (checkOutDate - checkInDate).Days;
@@ -230,6 +244,12 @@ public class Bookings
         if (bookingToEdit != null)
         {
             Room room = Program.rooms.Find(r => r.RoomId == bookingToEdit.RoomId);
+            if (room == null) //the room may have been deleted since the booking was made
+            {
+                Console.WriteLine("The room for this booking no longer exists.");
+                User.DisplayUserMenu();
+                return;
+            }
 
             Console.WriteLine("Enter check-in date (yyyy-MM-dd): ");
             DateTime newCheckInDate = Convert.ToDateTime(Console.ReadLine());
@@ -241,6 +261,7 @@ public class Bookings
             {
                 Console.WriteLine("Check-out date must be after check-in date. Please try again.");
                 UpdateBooking(); // Call UpdateBooking to allow the user to try again
+                return; // stop this attempt: the retry already handled the update
             }
 
             int nights = (newCheckOutDate - newCheckInDate).Days;

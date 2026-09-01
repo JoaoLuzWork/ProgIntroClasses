@@ -42,7 +42,7 @@ public class Room
         roomIdCounter++;
         Console.WriteLine("Room added successfully!");
 
-        Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after adding a room
+        Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after adding a room
     }
 
     //edit a selected room
@@ -74,7 +74,7 @@ public class Room
             roomToEdit.IsAvailable = newIsAvailable;
 
             Console.WriteLine("Room details updated successfully!");
-            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after editing a room
+            Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after editing a room
         }
         else
         {
@@ -103,7 +103,7 @@ public class Room
             roomToEdit.IsAvailable = newIsAvailable;
 
             Console.WriteLine("Room availability updated successfully!");
-            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after editing availability
+            Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after editing availability
         }
         else
         {
@@ -128,7 +128,7 @@ public class Room
         {
             Program.rooms.Remove(roomToDelete);
             Console.WriteLine("Room deleted successfully!");
-            Program.admins[0].DisplayAdminMenu(); // Return to the admin menu after deleting a room
+            Program.currentAdmin.DisplayAdminMenu(); // Return to the admin menu after deleting a room
         }
         else
         {
